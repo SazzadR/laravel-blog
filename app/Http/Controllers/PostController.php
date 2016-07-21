@@ -56,8 +56,11 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        return view('posts.show');
-        // return 'Post number ' . $id;
+        $post = Post::find($id);
+        if ($post) {
+            return view('posts.show', compact('post'));
+        }
+        return redirect()->route('posts.index');
     }
 
     /**
