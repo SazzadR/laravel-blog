@@ -12,13 +12,6 @@
         <div class="col-md-5 col-md-offset-2">
             <h1>Create New Post</h1>
             <hr>
-            @if(count($errors->all()))
-                <ul>
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            @endif
 
             {!! Form::open(['route' => 'posts.store', 'data-parsley-validate' => '']) !!}
                 {{ Form::label('title', 'Title:') }}
