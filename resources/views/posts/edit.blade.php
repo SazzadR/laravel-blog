@@ -15,6 +15,9 @@
             {{ Form::label('title', 'Title:') }}
             {{ Form::text('title', null, ['class' => 'form-control input-lg', 'required' => '', 'maxlength' => '255']) }}
 
+            {{ Form::label('slug', 'Slug:', ['class' => 'form-spacing-top']) }}
+            {{ Form::text('slug', null, ['class' => 'form-control', 'required' => '']) }}
+
             {{ Form::label('body', 'Body:', ['class' => 'form-spacing-top']) }}
             {{ Form::textarea('body', null, ['class' => 'form-control', 'required' => '']) }}
         </div>
