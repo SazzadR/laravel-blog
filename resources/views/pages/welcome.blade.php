@@ -5,6 +5,13 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
+
+            @if(session('status'))
+                <div class="alert alert-success">
+                    {{ session('status') }}
+                </div>
+            @endif
+
             <div class="jumbotron">
                 <h1>Welcome to My Blog!</h1>
                 <p class="lead">Thank you so much for visiting. This is my test website built with Laravel. Please read my popular post!</p>
