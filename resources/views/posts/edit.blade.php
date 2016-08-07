@@ -12,14 +12,17 @@
         {!! Form::model($post, ['route' => ['posts.update', $post->id], 'method' => 'put', 'data-parsley-validate' => '']) !!}
 
         <div class="col-md-8">
-            {{ Form::label('title', 'Title:') }}
-            {{ Form::text('title', null, ['class' => 'form-control input-lg', 'required' => '', 'maxlength' => '255']) }}
+            {!! Form::label('title', 'Title:') !!}
+            {!! Form::text('title', null, ['class' => 'form-control input-lg', 'required' => '', 'maxlength' => '255']) !!}
 
-            {{ Form::label('slug', 'Slug:', ['class' => 'form-spacing-top']) }}
-            {{ Form::text('slug', null, ['class' => 'form-control', 'required' => '']) }}
+            {!! Form::label('slug', 'Slug:', ['class' => 'form-spacing-top']) !!}
+            {!! Form::text('slug', null, ['class' => 'form-control', 'required' => '']) !!}
 
-            {{ Form::label('body', 'Body:', ['class' => 'form-spacing-top']) }}
-            {{ Form::textarea('body', null, ['class' => 'form-control', 'required' => '']) }}
+            {!! Form::label('category_id', 'Category:', ['class' => 'form-spacing-top']) !!}
+            {!! Form::select('category_id', $categories, null, ['class' => 'form-control', 'required' => '']) !!}
+
+            {!! Form::label('body', 'Body:', ['class' => 'form-spacing-top']) !!}
+            {!! Form::textarea('body', null, ['class' => 'form-control', 'required' => '']) !!}
         </div>
         <div class="col-md-4">
             <div class="well">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -32,7 +33,13 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        $categories_results = Category::orderBy('id', 'asc')->get(['id', 'name']);
+        $categories = [];
+        foreach ($categories_results as $category) {
+            $categories[$category->id] = $category->name;
+        }
+
+        return view('posts.create', compact('categories'));
     }
 
     /**
@@ -46,6 +53,7 @@ class PostController extends Controller
         $this->validate($request, [
             'title' => 'required|max:255',
             'slug' => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
+            'category_id' => 'required|integer',
             'body' => 'required'
         ]);
 
@@ -79,7 +87,14 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
-        return view('posts.edit', compact('post'));
+
+        $categories_results = Category::orderBy('id', 'asc')->get(['id', 'name']);
+        $categories = [];
+        foreach ($categories_results as $category) {
+            $categories[$category->id] = $category->name;
+        }
+
+        return view('posts.edit', compact('post', 'categories'));
     }
 
     /**
@@ -96,12 +111,14 @@ class PostController extends Controller
         if ($request->input('slug') == $post->slug) {
             $this->validate($request, [
                 'title' => 'required|max:255',
+                'category_id' => 'required|integer',
                 'body' => 'required'
             ]);
         } else {
             $this->validate($request, [
                 'title' => 'required|max:255',
                 'slug' => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
+                'category_id' => 'required|integer',
                 'body' => 'required'
             ]);
         }
@@ -109,6 +126,7 @@ class PostController extends Controller
         $post = Post::find($id);
         $post->title = $request->title;
         $post->slug = $request->slug;
+        $post->category_id = $request->category_id;
         $post->body = $request->body;
         $post->save();
 
