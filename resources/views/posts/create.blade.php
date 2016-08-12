@@ -4,6 +4,7 @@
 
 @section('stylesheets')
     {!! Html::style('css/parsley.css') !!}
+    {!! Html::style('css/select2.css') !!}
 @stop
 
 @section('content')
@@ -23,6 +24,9 @@
                 {!! Form::label('category_id', 'Category:') !!}
                 {!! Form::select('category_id', $categories, null, ['class' => 'form-control', 'required' => '']) !!}
 
+                {!! Form::label('tags', 'Tags:') !!}
+                {!! Form::select('tags', $tags, null, ['class' => 'form-control select2-multiple', 'name' => 'tags[]', 'multiple']) !!}
+
                 {{ Form::label('body', 'Post Body:') }}
                 {{ Form::textarea('body', null, ['class' => 'form-control', 'required' => '']) }}
 
@@ -35,4 +39,9 @@
 
 @section('scripts')
     {!! Html::script('js/parsley.min.js') !!}
+    {!! Html::script('js/select2.js') !!}
+
+    <script type="text/javascript">
+        $('.select2-multiple').select2();
+    </script>
 @stop

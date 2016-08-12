@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Post;
+use App\Tag;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Session;
@@ -14,7 +15,7 @@ class PostController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -34,12 +35,18 @@ class PostController extends Controller
     public function create()
     {
         $categories_results = Category::orderBy('id', 'asc')->get(['id', 'name']);
+        $tags_results = Tag::orderBy('id', 'asc')->get(['id', 'name']);
         $categories = [];
+        $tags = [];
+
         foreach ($categories_results as $category) {
             $categories[$category->id] = $category->name;
         }
+        foreach ($tags_results as $tag) {
+            $tags[$tag->id] = $tag->name;
+        }
 
-        return view('posts.create', compact('categories'));
+        return view('posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -57,7 +64,9 @@ class PostController extends Controller
             'body' => 'required'
         ]);
 
-        $post = Post::create($request->all());
+        $post = Post::create($request->all());;
+        $post->tags()->sync($request->tags, false);
+
         Session::flash('success', 'The blog post was successfully saved!');
 
         return redirect()->route('posts.show', $post->id);
@@ -89,12 +98,17 @@ class PostController extends Controller
         $post = Post::find($id);
 
         $categories_results = Category::orderBy('id', 'asc')->get(['id', 'name']);
+        $tags_results = Tag::orderBy('id', 'asc')->get(['id', 'name']);
         $categories = [];
+        $tags = [];
         foreach ($categories_results as $category) {
             $categories[$category->id] = $category->name;
         }
+        foreach ($tags_results as $tag) {
+            $tags[$tag->id] = $tag->name;
+        }
 
-        return view('posts.edit', compact('post', 'categories'));
+        return view('posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -130,6 +144,12 @@ class PostController extends Controller
         $post->body = $request->body;
         $post->save();
 
+        if (isset($request->tags)) {
+            $post->tags()->sync($request->tags, true);
+        } else {
+            $post->tags()->sync([], true);
+        }
+
         Session::flash('success', 'Post has been successfully updated.');
 
         return redirect()->route('posts.show', $post->id);
@@ -143,8 +163,9 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        $post = new Post();
-        $post->find($id)->delete();
+        $post = Post::find($id);
+        $post->tags()->detach();
+        $post->delete();
 
         Session::flash('success', 'Post has been deleted');
 
