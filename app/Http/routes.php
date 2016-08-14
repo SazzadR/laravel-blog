@@ -31,3 +31,5 @@ Route::post('contact', 'PagesController@postContact');
 Route::resource('posts', 'PostController');
 Route::resource('categories', 'CategoryController', ['except' => ['create']]);
 Route::resource('tags', 'TagsController', ['except' => ['create']]);
+
+Route::post('comments/{post_id}', ['as' => 'comments.store', 'uses' => 'CommentsController@store']);
