@@ -1,7 +1,7 @@
 $(document).ready(function () {
-    if ($('.alert').length) {
+    if ($('.alert-success').length) {
         setTimeout(function () {
-            $alertDiv = $('.alert');
+            $alertDiv = $('.alert-success');
             $alertDiv.hide('slow', function () {
                 $alertDiv.remove();
             });
