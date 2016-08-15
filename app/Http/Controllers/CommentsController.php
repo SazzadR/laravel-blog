@@ -10,29 +10,14 @@ use Session;
 
 class CommentsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function __construct()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $this->middleware('auth', ['except' => 'store']);
     }
 
     /**
      * Store a newly created resource in storage.
-     *
+     * @param int $post_id
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -45,22 +30,11 @@ class CommentsController extends Controller
         ]);
 
         $post = Post::find($post_id);
-        $comment = $post->comments()->create($request->all());
+        $post->comments()->create($request->all());
 
         Session::flash('success', 'Comment added successfully!');
 
         return redirect()->route('blog.single', [$post->slug]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -71,7 +45,8 @@ class CommentsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $comment = Comment::find($id);
+        return view('comments.edit', compact('comment'));
     }
 
     /**
@@ -83,7 +58,31 @@ class CommentsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+
+        $this->validate($request, [
+            'comment' => 'required|max:4000'
+        ]);
+
+        $input = $request->all();
+        $comment->fill($input)->save();
+
+        Session::flash('success', 'Comment has been updated!');
+
+        return redirect()->route('posts.show', [$comment->post->id]);
+    }
+
+    /**
+     * Display comment deletion confirmation.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function delete($id)
+    {
+        $comment = Comment::find($id);
+        return view('comments.delete', compact('comment'));
     }
 
     /**
@@ -94,6 +93,12 @@ class CommentsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comment = Comment::find($id);
+        $post_id = $comment->post->id;
+        $comment->delete();
+
+        Session::flash('success', 'Comment has been deleted.');
+
+        return redirect()->route('posts.show', $post_id);
     }
 }

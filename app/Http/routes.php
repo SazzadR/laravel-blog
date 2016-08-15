@@ -11,10 +11,14 @@
 |
 */
 
+Route::get('/', 'PagesController@getIndex');
+Route::get('about', 'PagesController@getAbout');
+Route::get('contact', 'PagesController@getContact');
+Route::post('contact', 'PagesController@postContact');
+
 Route::get('auth/login', ['as' => 'login', 'uses' => 'Auth\AuthController@getLogin']);
 Route::post('auth/login', 'Auth\AuthController@postLogin');
 Route::get('auth/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
-
 Route::get('auth/register', ['as' => 'register', 'uses' => 'Auth\AuthController@getRegister']);
 Route::post('auth/register', 'Auth\AuthController@postRegister');
 
@@ -24,12 +28,13 @@ Route::post('password/reset', 'Auth\PasswordController@reset');
 
 Route::get('blog/{slug}', ['as' => 'blog.single', 'uses' => 'BlogController@getSingle'])->where('slug', '[\w\d\-\_]+');
 Route::get('blog', ['as' => 'blog.index', 'uses' => 'BlogController@getIndex']);
-Route::get('/', 'PagesController@getIndex');
-Route::get('about', 'PagesController@getAbout');
-Route::get('contact', 'PagesController@getContact');
-Route::post('contact', 'PagesController@postContact');
+
 Route::resource('posts', 'PostController');
 Route::resource('categories', 'CategoryController', ['except' => ['create']]);
 Route::resource('tags', 'TagsController', ['except' => ['create']]);
 
 Route::post('comments/{post_id}', ['as' => 'comments.store', 'uses' => 'CommentsController@store']);
+Route::get('comments/{comment_id}/edit', ['as' => 'comments.edit', 'uses' => 'CommentsController@edit']);
+Route::put('comments/{comment_id}', ['as' => 'comments.update', 'uses' => 'CommentsController@update']);
+Route::get('comments/{comment_id}', ['as' => 'comments.delete', 'uses' => 'CommentsController@delete']);
+Route::delete('comments/{comment_id}', ['as' => 'comments.destroy', 'uses' => 'CommentsController@destroy']);
