@@ -56,6 +56,8 @@
 @section('scripts')
     {!! Html::script('js/parsley.min.js') !!}
     {!! Html::script('js/select2.js') !!}
+    <script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
+    {!! Html::script('js/tinymce_init.js') !!}
 
     <script type="text/javascript">
         $('.select2-multiple').select2().val({!! json_encode($post->tags()->getRelatedIds()) !!}).trigger('change');

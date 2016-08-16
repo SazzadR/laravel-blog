@@ -8,6 +8,7 @@ use App\Tag;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Session;
+use Purifier;
 
 class PostController extends Controller
 {
@@ -55,7 +56,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request   $request)
+    public function store(Request $request)
     {
         $this->validate($request, [
             'title' => 'required|max:255',
@@ -63,6 +64,8 @@ class PostController extends Controller
             'category_id' => 'required|integer',
             'body' => 'required'
         ]);
+
+        $request->merge(['body' => Purifier::clean($request->body)]);
 
         $post = Post::create($request->all());;
         $post->tags()->sync($request->tags, false);
@@ -137,12 +140,10 @@ class PostController extends Controller
             ]);
         }
 
-        $post = Post::find($id);
-        $post->title = $request->title;
-        $post->slug = $request->slug;
-        $post->category_id = $request->category_id;
-        $post->body = $request->body;
-        $post->save();
+        $request->merge(['body' => Purifier::clean($request->body)]);
+
+        $input = $request->all();
+        $post->fill($input)->save();
 
         if (isset($request->tags)) {
             $post->tags()->sync($request->tags, true);

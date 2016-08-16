@@ -10,7 +10,7 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-5 col-md-offset-2">
+        <div class="col-md-8 col-md-offset-2">
             <h1>Create New Post</h1>
             <hr>
 
@@ -28,7 +28,7 @@
                 {!! Form::select('tags', $tags, null, ['class' => 'form-control select2-multiple', 'name' => 'tags[]', 'multiple']) !!}
 
                 {{ Form::label('body', 'Post Body:') }}
-                {{ Form::textarea('body', null, ['class' => 'form-control', 'required' => '']) }}
+                {{ Form::textarea('body', null, ['class' => 'form-control']) }}
 
                 {{ Form::submit('Create Post', ['class' => 'btn btn-success btn-lg btn-block', 'style' => 'margin-top: 20px']) }}
             {!! Form::close() !!}
@@ -40,6 +40,8 @@
 @section('scripts')
     {!! Html::script('js/parsley.min.js') !!}
     {!! Html::script('js/select2.js') !!}
+    <script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
+    {!! Html::script('js/tinymce_init.js') !!}
 
     <script type="text/javascript">
         $('.select2-multiple').select2();
