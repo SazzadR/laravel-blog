@@ -14,7 +14,7 @@
             <h1>Create New Post</h1>
             <hr>
 
-            {!! Form::open(['route' => 'posts.store', 'data-parsley-validate' => '']) !!}
+            {!! Form::open(['route' => 'posts.store', 'data-parsley-validate' => '', 'files' => true]) !!}
                 {{ Form::label('title', 'Title:') }}
                 {{ Form::text('title', null, ['class' => 'form-control', 'required' => '', 'maxlength' => '255']) }}
 
@@ -26,6 +26,9 @@
 
                 {!! Form::label('tags', 'Tags:') !!}
                 {!! Form::select('tags', $tags, null, ['class' => 'form-control select2-multiple', 'name' => 'tags[]', 'multiple']) !!}
+
+                {!! Form::label('featured_image', 'Upload Featured Image:') !!}
+                {!! Form::file('featured_image') !!}
 
                 {{ Form::label('body', 'Post Body:') }}
                 {{ Form::textarea('body', null, ['class' => 'form-control']) }}

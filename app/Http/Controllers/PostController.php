@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Session;
 use Purifier;
+use Image;
 
 class PostController extends Controller
 {
@@ -69,6 +70,16 @@ class PostController extends Controller
 
         $post = Post::create($request->all());;
         $post->tags()->sync($request->tags, false);
+
+        if ($request->hasFile('featured_image')) {
+            $image = $request->file('featured_image');
+            $fileName = time() . '.' . $image->getClientOriginalExtension();
+            $location = public_path('images/' . $fileName);
+
+            Image::make($image)->resize(800, 400)->save($location);
+
+            $post->where('id', $post->id)->update(['image' => $fileName]);
+        }
 
         Session::flash('success', 'The blog post was successfully saved!');
 
