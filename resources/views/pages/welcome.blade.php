@@ -12,11 +12,14 @@
                 </div>
             @endif
 
-            <div class="jumbotron">
-                <h1>Welcome to My Blog!</h1>
-                <p class="lead">Thank you so much for visiting. This is my test website built with Laravel. Please read my popular post!</p>
-                <p><a class="btn btn-primary btn-lg" href="#" role="button">Popular Post</a></p>
-            </div>
+            @if($featured_post)
+                <div class="jumbotron">
+                    <h2><i>Featured Post</i></h2>
+                    <h4 class="panel-heading">{{ $featured_post->title }}</h4>
+                    <p class="lead">{{ substr(strip_tags($featured_post->body), 0, 110) }}{{ strlen(strip_tags($featured_post->body)) > 110 ? '...': '' }}</p>
+                    <p><a class="btn btn-primary btn-lg" href="{{ route('blog.single', [$featured_post->slug]) }}" role="button">Read More</a></p>
+                </div>
+            @endif
         </div>
     </div>
     <!-- end of header .row -->

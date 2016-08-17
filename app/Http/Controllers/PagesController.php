@@ -13,7 +13,8 @@ class PagesController extends Controller
     public function getIndex()
     {
         $posts = Post::orderBy('created_at', 'desc')->limit(4)->get();
-        return view('pages.welcome', compact('posts'));
+        $featured_post = Post::where('featured_post', 1)->first();
+        return view('pages.welcome', compact('posts', 'featured_post'));
     }
 
     public function getAbout()

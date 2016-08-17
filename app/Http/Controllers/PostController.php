@@ -172,6 +172,11 @@ class PostController extends Controller
             $post->where('id', $post->id)->update(['image' => $fileName]);
         }
 
+        if ($request->featured_post) {
+            Post::where('id', '<>', $post->id)
+                ->update(['featured_post' => 0]);
+        }
+
         Session::flash('success', 'Post has been successfully updated.');
 
         return redirect()->route('posts.show', $post->id);
