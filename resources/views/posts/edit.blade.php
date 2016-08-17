@@ -10,7 +10,7 @@
 @section('content')
 
     <div class="row">
-        {!! Form::model($post, ['route' => ['posts.update', $post->id], 'method' => 'put', 'data-parsley-validate' => '']) !!}
+        {!! Form::model($post, ['route' => ['posts.update', $post->id], 'method' => 'put', 'data-parsley-validate' => '', 'files' => true]) !!}
 
         <div class="col-md-8">
             {!! Form::label('title', 'Title:') !!}
@@ -21,6 +21,16 @@
 
             {!! Form::label('category_id', 'Category:', ['class' => 'form-spacing-top']) !!}
             {!! Form::select('category_id', $categories, null, ['class' => 'form-control', 'required' => '']) !!}
+
+            {!! Form::label('featured_image', 'Featured Image:', ['class' => 'form-spacing-top']) !!}
+            {!! Form::file('featured_image') !!}
+            <div>
+                @if(!empty($post->image))
+                    <img src="{{ asset('images/' . $post->image) }}" class="img-thumbnail reduce-width">
+                @else
+                    <img src="{{ asset('images/placeholder.png') }}" class="img-thumbnail reduce-width">
+                @endif
+            </div>
 
             {!! Form::label('tags', 'Tags:', ['class' => 'form-spacing-top']) !!}
             {!! Form::select('tags', $tags, null, ['class' => 'form-control select2-multiple', 'name' => 'tags[]', 'multiple']) !!}

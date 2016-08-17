@@ -6,6 +6,9 @@
 	<div class="row">
 		<div class="col-md-8">
 			<h1>{{ $post->title }}</h1>
+			@if(!empty($post->image))
+				<img src="{{ asset('images/' . $post->image) }}" class="img-responsive">
+			@endif
 			<p class="lead">{!! $post->body !!}</p>
 			<hr>
 			<div class="tags">
@@ -44,7 +47,7 @@
 			<div class="well">
 				<dl class="dl-horizontal">
 					<label>Url: </label>
-					<p><a href="{{ route('blog.single', $post->slug) }}">{{ route('blog.single', $post->slug) }}</a></p>
+					<p><a href="{{ route('blog.single', $post->slug) }}" class="word-wrap">{{ route('blog.single', $post->slug) }}</a></p>
 				</dl>
 				<dl class="dl-horizontal">
 					<label>Category: </label>

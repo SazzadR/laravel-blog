@@ -162,6 +162,16 @@ class PostController extends Controller
             $post->tags()->sync([], true);
         }
 
+        if ($request->hasFile('featured_image')) {
+            $image = $request->file('featured_image');
+            $fileName = time() . '.' . $image->getClientOriginalExtension();
+            $location = public_path('images/' . $fileName);
+
+            Image::make($image)->resize(800, 400)->save($location);
+
+            $post->where('id', $post->id)->update(['image' => $fileName]);
+        }
+
         Session::flash('success', 'Post has been successfully updated.');
 
         return redirect()->route('posts.show', $post->id);
