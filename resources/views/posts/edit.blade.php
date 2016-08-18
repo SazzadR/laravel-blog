@@ -27,6 +27,10 @@
             <div>
                 @if(!empty($post->image))
                     <img src="{{ asset('images/' . $post->image) }}" class="img-thumbnail reduce-width">
+                    <div>
+                        {!! Form::label('remove_image', 'Remove Featured Image') !!}
+                        {!! Form::checkbox('remove_image') !!}
+                    </div>
                 @else
                     <img src="{{ asset('images/placeholder.png') }}" class="img-thumbnail reduce-width">
                 @endif

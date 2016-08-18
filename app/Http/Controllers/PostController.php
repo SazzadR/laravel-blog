@@ -10,6 +10,7 @@ use App\Http\Requests;
 use Session;
 use Purifier;
 use Image;
+use Storage;
 
 class PostController extends Controller
 {
@@ -63,7 +64,8 @@ class PostController extends Controller
             'title' => 'required|max:255',
             'slug' => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
             'category_id' => 'required|integer',
-            'body' => 'required'
+            'body' => 'required',
+            'featured_image' => 'sometimes|image'
         ]);
 
         $request->merge(['body' => Purifier::clean($request->body)]);
@@ -140,14 +142,16 @@ class PostController extends Controller
             $this->validate($request, [
                 'title' => 'required|max:255',
                 'category_id' => 'required|integer',
-                'body' => 'required'
+                'body' => 'required',
+                'featured_image' => 'sometimes|image'
             ]);
         } else {
             $this->validate($request, [
                 'title' => 'required|max:255',
                 'slug' => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
                 'category_id' => 'required|integer',
-                'body' => 'required'
+                'body' => 'required',
+                'featured_image' => 'sometimes|image'
             ]);
         }
 
@@ -170,6 +174,13 @@ class PostController extends Controller
             Image::make($image)->resize(800, 400)->save($location);
 
             $post->where('id', $post->id)->update(['image' => $fileName]);
+
+            Storage::delete([$post->image]);
+        }
+
+        if ($request->remove_image) {
+            $post->where('id', $post->id)->update(['image' => null]);
+            Storage::delete([$post->image]);
         }
 
         if ($request->featured_post) {
@@ -192,6 +203,7 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         $post->tags()->detach();
+        Storage::delete([$post->image]);
         $post->delete();
 
         Session::flash('success', 'Post has been deleted');
