@@ -34,7 +34,12 @@
                     @foreach($posts as $post)
                         <tr>
                             <td>{{ $post->id }}</td>
-                            <td>{{ $post->title }}</td>
+                            <td>
+                                {{ $post->title }}
+                                @if($post->featured_post)
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                @endif
+                            </td>
                             <td>{{ substr(strip_tags($post->body), 0, 50) }}{{ strlen(strip_tags($post->body)) > 50 ? '...': '' }}</td>
                             <td>{{ $post->category->name }}</td>
                             <td>{{ date('M j, Y', strtotime($post->created_at)) }}</td>
